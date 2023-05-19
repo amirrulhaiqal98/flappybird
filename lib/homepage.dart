@@ -42,31 +42,81 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(children: [
-        Expanded(
-          flex: 2,
-          child: GestureDetector(
-            onTap: () {
-              if (gameHasStarted) {
-                jump();
-              } else {
-                startGame();
-              }
-            },
-            child: AnimatedContainer(
-              alignment: Alignment(0, birdYaxis),
-              duration: const Duration(milliseconds: 0),
-              color: Colors.blue,
-              child: const MyBird(),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
+      body: Column(
+        children: [
+          Expanded(
+              flex: 2,
+              child: Stack(
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      if (gameHasStarted) {
+                        jump();
+                      } else {
+                        startGame();
+                      }
+                    },
+                    child: AnimatedContainer(
+                      alignment: Alignment(0, birdYaxis),
+                      duration: Duration.zero,
+                      color: Colors.blue,
+                      child: const MyBird(),
+                    ),
+                  ),
+                  Container(
+                    alignment: const Alignment(0, -0.5),
+                    child: const Text("TAP TO PLAY"),
+                  )
+                ],
+              )),
+          Container(
+            height: 15,
             color: Colors.green,
           ),
-        ),
-      ]),
+          Expanded(
+            child: Container(
+              color: Colors.brown,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Score",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "0",
+                        style: TextStyle(color: Colors.white, fontSize: 35),
+                      ),
+                    ],
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Text(
+                        "Score",
+                        style: TextStyle(color: Colors.white, fontSize: 20),
+                      ),
+                      SizedBox(
+                        height: 20,
+                      ),
+                      Text(
+                        "10",
+                        style: TextStyle(color: Colors.white, fontSize: 35),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
