@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flappy_bird/barriers.dart';
 import 'package:flappy_bird/bird.dart';
 import 'package:flutter/material.dart';
 
@@ -16,6 +17,8 @@ class _HomePageState extends State<HomePage> {
   double height = 0;
   double initialHeight = birdYaxis;
   bool gameHasStarted = false;
+  static double barrierXone = 1;
+  double barrierXtwo = barrierXone + 1.5;
 
   void jump() {
     setState(() {
@@ -32,90 +35,136 @@ class _HomePageState extends State<HomePage> {
       setState(() {
         birdYaxis = initialHeight - height;
       });
-      if (birdYaxis > 1) {
-        timer.cancel();
-        gameHasStarted = false;
-      }
+
+      setState(() {
+        if (barrierXone < -2) {
+          barrierXone += 3;
+        } else {
+          barrierXone -= 0.05;
+        }
+      });
+
+      setState(() {
+        if (barrierXtwo < -2) {
+          barrierXtwo += 3;
+        } else {
+          barrierXtwo -= 0.05;
+        }
+      });
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          Expanded(
-              flex: 2,
-              child: Stack(
-                children: [
-                  GestureDetector(
-                    onTap: () {
-                      if (gameHasStarted) {
-                        jump();
-                      } else {
-                        startGame();
-                      }
-                    },
-                    child: AnimatedContainer(
+    return GestureDetector(
+      onTap: () {
+        if (gameHasStarted) {
+          jump();
+        } else {
+          startGame();
+        }
+      },
+      child: Scaffold(
+        body: Column(
+          children: [
+            Expanded(
+                flex: 2,
+                child: Stack(
+                  children: [
+                    AnimatedContainer(
                       alignment: Alignment(0, birdYaxis),
                       duration: Duration.zero,
                       color: Colors.blue,
                       child: const MyBird(),
                     ),
-                  ),
-                  Container(
-                    alignment: const Alignment(0, -0.5),
-                    child: const Text("TAP TO PLAY"),
-                  )
-                ],
-              )),
-          Container(
-            height: 15,
-            color: Colors.green,
-          ),
-          Expanded(
-            child: Container(
-              color: Colors.brown,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "Score",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                    Container(
+                      alignment: const Alignment(0, -0.3),
+                      child: gameHasStarted
+                          ? const Text("")
+                          : const Text(
+                              "T A P  T O  P L A Y",
+                              style:
+                                  TextStyle(fontSize: 20, color: Colors.white),
+                            ),
+                    ),
+                    AnimatedContainer(
+                      alignment: Alignment(barrierXone, 1.6),
+                      duration: const Duration(milliseconds: 0),
+                      child: MyBarriers(
+                        size: 200.0,
                       ),
-                      SizedBox(
-                        height: 20,
+                    ),
+                    AnimatedContainer(
+                      alignment: Alignment(barrierXone, -1.6),
+                      duration: const Duration(milliseconds: 0),
+                      child: MyBarriers(
+                        size: 200.0,
                       ),
-                      Text(
-                        "0",
-                        style: TextStyle(color: Colors.white, fontSize: 35),
+                    ),
+                    AnimatedContainer(
+                      alignment: Alignment(barrierXtwo, 1.6),
+                      duration: const Duration(milliseconds: 0),
+                      child: MyBarriers(
+                        size: 150.0,
                       ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [
-                      Text(
-                        "Score",
-                        style: TextStyle(color: Colors.white, fontSize: 20),
+                    ),
+                    AnimatedContainer(
+                      alignment: Alignment(barrierXtwo, -1.6),
+                      duration: const Duration(milliseconds: 0),
+                      child: MyBarriers(
+                        size: 250.0,
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        "10",
-                        style: TextStyle(color: Colors.white, fontSize: 35),
-                      ),
-                    ],
-                  )
-                ],
+                    ),
+                  ],
+                )),
+            Container(
+              height: 15,
+              color: Colors.green,
+            ),
+            Expanded(
+              child: Container(
+                color: Colors.brown,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "Score",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "0",
+                          style: TextStyle(color: Colors.white, fontSize: 35),
+                        ),
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Text(
+                          "Score",
+                          style: TextStyle(color: Colors.white, fontSize: 20),
+                        ),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        Text(
+                          "10",
+                          style: TextStyle(color: Colors.white, fontSize: 35),
+                        ),
+                      ],
+                    )
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

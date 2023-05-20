@@ -12,9 +12,10 @@ class MyBarriers extends StatelessWidget {
     return Container(
       width: 100,
       height: size,
-      decoration: const BoxDecoration(
-        color: Colors.green,
-      ),
+      decoration: BoxDecoration(
+          color: Colors.green,
+          border: Border.all(width: 10, color: Color.fromARGB(255, 5, 63, 7)),
+          borderRadius: BorderRadius.circular(15)),
     );
   }
 }
